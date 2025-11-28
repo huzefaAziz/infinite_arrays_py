@@ -16,6 +16,7 @@ This package is inspired by and converted from [InfiniteArrays.jl](https://githu
 - **Broadcasting Support**: Supports element-wise operations and broadcasting
 - **Flexible Indexing**: Support for various infinite range types
 - **Mutable Caching**: Convert lazy arrays to cached (mutable) versions
+- **Infinite-dimensional QR Algorithm**: Compute spectra of infinite operators with convergence control
 
 ## Installation
 
@@ -167,6 +168,58 @@ Infinite step range with specified start and step.
 
 #### `∞`
 Infinity constant for specifying infinite dimensions.
+
+### Infinite-dimensional QR Algorithm
+
+The package includes an implementation of the infinite-dimensional QR (IQR) algorithm for computing spectra of infinite-dimensional operators, as described in:
+
+> Colbrook, M.J. & Hansen, A.C. "On the infinite-dimensional QR algorithm"  
+> Numer. Math. 143, 17-83 (2019). https://doi.org/10.1007/s00211-019-01047-5
+
+#### Basic Usage
+
+```python
+from infinite_arrays.iqr import (
+    InfiniteOperator,
+    iqr_algorithm,
+    create_diagonal_operator,
+    create_tridiagonal_operator,
+)
+
+# Create a diagonal operator
+diag_op = create_diagonal_operator(lambda i: float(i + 1))
+
+# Compute spectrum
+result = iqr_algorithm(diag_op, n=50, max_iter=1000, tol=1e-10)
+print("Eigenvalues:", result['eigenvalues'])
+print("Converged:", result['converged'])
+```
+
+#### Custom Operators
+
+```python
+# Define a custom operator via matrix function
+def matrix_func(i, j):
+    return 1.0 / (1.0 + abs(i - j))
+
+operator = InfiniteOperator(matrix_func)
+result = iqr_algorithm(operator, n=30, compute_eigenvectors=True)
+```
+
+#### Adaptive Spectrum Computation
+
+```python
+from infinite_arrays.iqr import iqr_spectrum
+
+# Compute spectrum with multiple truncation sizes
+spectrum = iqr_spectrum(
+    operator,
+    n_range=[20, 50, 100],
+    adaptive=True
+)
+```
+
+See `examples/iqr_example.py` for more detailed examples.
 
 ## Limitations
 

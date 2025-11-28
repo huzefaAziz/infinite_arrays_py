@@ -10,6 +10,13 @@ from .arrays import InfiniteArray, Ones, Zeros, Fill
 from .broadcasting import BroadcastArray
 from .cache import cache, CachedArray
 from .diagonal import InfiniteDiagonal
+from .iqr import (
+    InfiniteOperator,
+    iqr_algorithm,
+    iqr_spectrum,
+    create_diagonal_operator,
+    create_tridiagonal_operator,
+)
 
 # Import the infinity module to access the infinity instance
 from . import infinity as _infinity_module
@@ -37,4 +44,9 @@ __all__ = [
     "cache",
     "CachedArray",
     "InfiniteDiagonal",
+    "InfiniteOperator",
+    "iqr_algorithm",
+    "iqr_spectrum",
+    "create_diagonal_operator",
+    "create_tridiagonal_operator",
 ]
